@@ -1,3 +1,5 @@
+import 'package:dart_features/custom_stream_builder.dart';
+import 'package:dart_features/stream_generator.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -21,40 +23,35 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Extension"),
-      ),
-      body: Column(
-        children: [
-          Text('45'.parseInt.toString()),
-          const SizedBox(height: 20),
-          Text("Height ${context.height}"),
-          Text("Width ${context.width}"),
-          const SizedBox(height: 20),
-        ],
-      ).center,
-    );
-  }
-}
+        appBar: AppBar(
+          title: const Text("Stream"),
+        ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text("Stream using Async Generator"),
+              StreamBuilder(
+                stream: StreamGnerator().intStream,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const CircularProgressIndicator();
+                  }
 
-extension StringExt on String {
-  int? get parseInt {
-    return int.tryParse(this);
-  }
-}
+                  if (snapshot.hasError || !snapshot.hasData) {
+                    return const Text("Error occured");
+                  }
 
-extension ContextExt on BuildContext {
-  double get width {
-    return MediaQuery.of(this).size.width;
-  }
-
-  double get height {
-    return MediaQuery.of(this).size.height;
-  }
-}
-
-extension WidgetExt on Widget {
-  Widget get center {
-    return Center(child: this);
+                  return Text(
+                    "${snapshot.data ?? 0}",
+                    style: const TextStyle(fontSize: 20),
+                  );
+                },
+              ),
+              const SizedBox(height: 50),
+              const CustomStreamBuilder(),
+            ],
+          ),
+        ));
   }
 }
