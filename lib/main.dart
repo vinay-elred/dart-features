@@ -1,59 +1,60 @@
-import 'dart:math' as math;
+import 'package:flutter/material.dart';
 
 void main() {
-  ScientificCalculator().currentModel("Scientific");
-  ScientificCalculator().multi(4, 5);
-  print(ScientificCalculator().add(5, 4));
-  print(ScientificCalculator().random(5));
-  //
-  Calculator().currentModel("Normal");
-  Calculator().multi(4, 5);
-  print(Calculator().add(5, 4));
-  print(Calculator().double2X(5));
+  runApp(const MyApp());
 }
 
-class ScientificCalculator with Common, Other {
-  int random(int max) {
-    return math.Random().nextInt(max);
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      home: Home(),
+    );
   }
 }
 
-class Calculator with Common, Other {
-  int double2X(int val) {
-    return val * 2;
+class Home extends StatelessWidget {
+  const Home({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Extension"),
+      ),
+      body: Column(
+        children: [
+          Text('45'.parseInt.toString()),
+          const SizedBox(height: 20),
+          Text("Height ${context.height}"),
+          Text("Width ${context.width}"),
+          const SizedBox(height: 20),
+        ],
+      ).center,
+    );
   }
 }
 
-mixin Common {
-  int add(int a, int b) {
-    return a + b;
-  }
-
-  int sub(int a, int b) {
-    return a - b;
-  }
-
-  int multi(int a, int b) {
-    return a * b;
-  }
-
-  double divide(int a, int b) {
-    return a / b;
-  }
-
-  int remainder(int a, int b) {
-    return a % b;
+extension StringExt on String {
+  int? get parseInt {
+    return int.tryParse(this);
   }
 }
 
-mixin Other {
-  void currentModel(String val) {
-    print("Current model $val");
+extension ContextExt on BuildContext {
+  double get width {
+    return MediaQuery.of(this).size.width;
   }
 
-  int multi(int a, int b) {
-    final val = a * b;
-    print("Other mixin $val");
-    return val;
+  double get height {
+    return MediaQuery.of(this).size.height;
+  }
+}
+
+extension WidgetExt on Widget {
+  Widget get center {
+    return Center(child: this);
   }
 }
