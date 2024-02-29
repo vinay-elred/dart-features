@@ -1,39 +1,59 @@
+import 'dart:math' as math;
+
 void main() {
-  final p1 = SharedPrefs.instance;
-  final p2 = SharedPrefs.instance;
-  if (p1.hashCode == p2.hashCode) {
-    print("Same obj SharedPrefs");
-  }
+  ScientificCalculator().currentModel("Scientific");
+  ScientificCalculator().multi(4, 5);
+  print(ScientificCalculator().add(5, 4));
+  print(ScientificCalculator().random(5));
+  //
+  Calculator().currentModel("Normal");
+  Calculator().multi(4, 5);
+  print(Calculator().add(5, 4));
+  print(Calculator().double2X(5));
+}
 
-  final obj1 = LocalDB.instance;
-  final obj2 = LocalDB.instance;
-  if (obj1.hashCode == obj2.hashCode) {
-    print("Same obj LocalDB");
-  }
-
-  final con1 = Config();
-  final con2 = Config();
-  if (con1.hashCode == con2.hashCode) {
-    print("Same obj Config");
+class ScientificCalculator with Common, Other {
+  int random(int max) {
+    return math.Random().nextInt(max);
   }
 }
 
-class SharedPrefs {
-  const SharedPrefs._();
-  static get instance => const SharedPrefs._();
+class Calculator with Common, Other {
+  int double2X(int val) {
+    return val * 2;
+  }
 }
 
-class LocalDB {
-  const LocalDB._();
-  static LocalDB? _instance;
-  static get instance => _instance ??= const LocalDB._();
+mixin Common {
+  int add(int a, int b) {
+    return a + b;
+  }
+
+  int sub(int a, int b) {
+    return a - b;
+  }
+
+  int multi(int a, int b) {
+    return a * b;
+  }
+
+  double divide(int a, int b) {
+    return a / b;
+  }
+
+  int remainder(int a, int b) {
+    return a % b;
+  }
 }
 
-class Config {
-  const Config._();
-  static const _instance = Config._();
+mixin Other {
+  void currentModel(String val) {
+    print("Current model $val");
+  }
 
-  factory Config() {
-    return _instance;
+  int multi(int a, int b) {
+    final val = a * b;
+    print("Other mixin $val");
+    return val;
   }
 }
